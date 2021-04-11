@@ -2,55 +2,101 @@ package android.exercise.mini.calculator.app;
 
 import java.io.Serializable;
 
-public class SimpleCalculatorImpl implements SimpleCalculator {
 
-  // todo: add fields as needed
+
+public class SimpleCalculatorImpl implements SimpleCalculator {
+  // Constants
+  private static final String INITIAL_STRING = "";
+  private static final String [] OPERATIONS = {"+", "-"};
+
+  // Props
+  private String outputDisplay = INITIAL_STRING;
+
+  // Util methods
+  private boolean includes (String[] arr, String toCheck){
+    for(String s : arr){
+      if(s.equals(toCheck)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isAllowToUseOperation(){
+    if(this.outputDisplay.length() > 0){
+      String lastInInput = this.outputDisplay.substring(this.outputDisplay.length() - 1);
+      for (String operation : OPERATIONS) {
+        if (operation.equals (lastInInput)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private long applyOperation(long prevResult, String operation, long num){
+    switch(operation){
+      case "+": return prevResult + num;
+      case "-": return prevResult - num;
+      default: return prevResult;
+    }
+  }
 
   @Override
   public String output() {
-    // todo: return output based on the current state
-    return "implement me please";
+    return this.outputDisplay.equals(INITIAL_STRING) ? "0" : this.outputDisplay;
   }
 
   @Override
   public void insertDigit(int digit) {
-    // todo: insert a digit
+    if(digit < 0 || digit > 9){
+      throw new RuntimeException("Invalid Input");
+    }
+    this.outputDisplay += digit;
   }
 
   @Override
   public void insertPlus() {
-    // todo: insert a plus
+    if(this.isAllowToUseOperation()){
+      this.outputDisplay += this.outputDisplay.equals(INITIAL_STRING) ? "0+" : "+";
+    }
   }
 
   @Override
   public void insertMinus() {
-    // todo: insert a minus
+    if(this.isAllowToUseOperation()){
+      this.outputDisplay += this.outputDisplay.equals(INITIAL_STRING) ? "0-" : "-";
+    }
   }
 
   @Override
   public void insertEquals() {
-    // todo: calculate the equation. after calling `insertEquals()`, the output should be the result
-    //  e.g. given input "14+3", calling `insertEquals()`, and calling `output()`, output should be "17"
+    String[] operations = this.outputDisplay.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
+    long result = Long.parseLong(operations[0]);
+    if(!includes(OPERATIONS, operations[operations.length - 1])){
+      for(int i = 1; i < operations.length - 1; i+=2){
+        result = applyOperation(result, operations[i], Long.parseLong(operations[i + 1]));
+      }
+      this.outputDisplay = String.valueOf(result);
+    }
   }
 
   @Override
   public void deleteLast() {
-    // todo: delete the last input (digit, plus or minus)
-    //  e.g.
-    //  if input was "12+3" and called `deleteLast()`, then delete the "3"
-    //  if input was "12+" and called `deleteLast()`, then delete the "+"
-    //  if no input was given, then there is nothing to do here
+    if(this.outputDisplay.length() > 0){
+      this.outputDisplay = this.outputDisplay.substring(0, this.outputDisplay.length() - 1);
+    }
   }
 
   @Override
   public void clear() {
-    // todo: clear everything (same as no-input was never given)
+    this.outputDisplay = "";
   }
 
   @Override
   public Serializable saveState() {
     CalculatorState state = new CalculatorState();
-    // todo: insert all data to the state, so in the future we can load from this state
+    state.setOutputDisplay(this.outputDisplay);
     return state;
   }
 
@@ -60,17 +106,23 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
       return; // ignore
     }
     CalculatorState casted = (CalculatorState) prevState;
-    // todo: use the CalculatorState to load
+    this.outputDisplay = casted.getOutputDisplay();
   }
 
   private static class CalculatorState implements Serializable {
-    /*
-    TODO: add fields to this class that will store the calculator state
-    all fields must only be from the types:
-    - primitives (e.g. int, boolean, etc)
-    - String
-    - ArrayList<> where the type is a primitive or a String
-    - HashMap<> where the types are primitives or a String
-     */
+    private String outputDisplay;
+
+    public CalculatorState(){
+      this.outputDisplay = "";
+    }
+
+    public void setOutputDisplay(String value){
+      this.outputDisplay = value;
+    }
+
+    public String getOutputDisplay(){
+      return this.outputDisplay;
+    }
+
   }
 }
