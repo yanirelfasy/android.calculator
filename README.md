@@ -10,14 +10,14 @@ Which tests can we run on the calculator? On the activity? On the app?
 
 # Answer
 We need to add the following:
-    - X button in the UI
-    - AddMultiplication method to add X to the string
-    - Add multiplication support in out InsertEqual Method.
+    (*) X button in the UI
+    (*) AddMultiplication method to add X to the string
+    (*) Add multiplication support in out InsertEqual Method.
 We will run the following tests:
-    - Calculator - check multiplication with a big number as a result.
-    - Calculator - check multiplication with different signs (+ and -)
-    - Calculator - Check that X added to the output string correctly.
-    - Activity - Check that the button X calls the multiplication method.
-    - App - Add flowTest  for different sign multiplication
-    - App - Add flowTest for 0 multiplication.
-    - App - Add flowTest for a long number as a result.
+    (*) Calculator - check multiplication with a big number as a result.
+    (*) Calculator - check multiplication with different signs (+ and -)
+    (*) Calculator - Check that X added to the output string correctly.
+    (*) Activity - Check that the button X calls the multiplication method.
+    (*) App - Add flowTest  for different sign multiplication
+    (*) App - Add flowTest for 0 multiplication.
+    (*) App - Add flowTest for a long number as a result.
