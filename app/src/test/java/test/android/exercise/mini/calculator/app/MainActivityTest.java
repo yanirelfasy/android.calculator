@@ -70,8 +70,77 @@ public class MainActivityTest {
     assertEquals(expectedText, activityMainTextView.getText().toString()); // make sure that the activity shows text from calculator.output()
   }
 
-  // TODO: add tests for clicks on all buttons
+  @Test
+  public void when_userClicksMinus_then_activityShouldFowardCallToCalculator_and_ShowTheExpectedCalculatorOutputRightAway(){
+    // setup
+    String expectedText = "button MINUS clicked";
+    Mockito.when(mockCalculator.output()).thenReturn(expectedText);
 
+    TextView activityMainTextView = activityUnderTest.findViewById(R.id.textViewCalculatorOutput);
+    View button = activityUnderTest.findViewById(R.id.buttonMinus);
+
+    // test
+    button.performClick();
+
+    // verify
+    Mockito.verify(mockCalculator).insertMinus(); // make sure that the activity called this method
+    assertEquals(expectedText, activityMainTextView.getText().toString()); // make sure that the activity shows text from calculator.output()
+  }
+
+  public void when_userClicksClear_then_activityShouldFowardCallToCalculator_and_ShowTheExpectedCalculatorOutputRightAway(){
+    // setup
+    String expectedText = "button CLEAR clicked";
+    Mockito.when(mockCalculator.output()).thenReturn(expectedText);
+
+    TextView activityMainTextView = activityUnderTest.findViewById(R.id.textViewCalculatorOutput);
+    View button = activityUnderTest.findViewById(R.id.buttonClear);
+
+    // test
+    button.performClick();
+
+    // verify
+    Mockito.verify(mockCalculator).clear(); // make sure that the activity called this method
+    assertEquals(expectedText, activityMainTextView.getText().toString()); // make sure that the activity shows text from calculator.output()
+  }
+
+
+  public void when_userClicksDelete_then_activityShouldFowardCallToCalculator_and_ShowTheExpectedCalculatorOutputRightAway(){
+    // setup
+    String expectedText = "button DELETE clicked";
+    Mockito.when(mockCalculator.output()).thenReturn(expectedText);
+
+    TextView activityMainTextView = activityUnderTest.findViewById(R.id.textViewCalculatorOutput);
+    View button = activityUnderTest.findViewById(R.id.buttonBackSpace);
+
+    // test
+    button.performClick();
+
+    // verify
+    Mockito.verify(mockCalculator).deleteLast(); // make sure that the activity called this method
+    assertEquals(expectedText, activityMainTextView.getText().toString()); // make sure that the activity shows text from calculator.output()
+  }
+
+  @Test
+  public void when_userClicksNumButton_then_activityShouldFowardCallToCalculator_and_ShowTheExpectedCalculatorOutputRightAway() {
+    TextView activityMainTextView = activityUnderTest.findViewById(R.id.textViewCalculatorOutput);
+    for(int i = 0; i < 10; i++){
+      System.out.println("TESTING BUTTON" + i);
+      // setup
+      String expectedText = "button" + i +  "clicked";
+      Mockito.when(mockCalculator.output()).thenReturn(expectedText);
+
+      String buttonID = "button" + i;
+      int resID = activityUnderTest.getResources().getIdentifier(buttonID, "id", activityUnderTest.getPackageName());
+      View button = activityUnderTest.findViewById(resID);
+
+      // test
+      button.performClick();
+
+      // verify
+      Mockito.verify(mockCalculator).insertDigit(i); // make sure that the activity called this method
+      assertEquals(expectedText, activityMainTextView.getText().toString()); // make sure that the activity shows text from calculator.output()
+    }
+  }
 
   @Test
   public void when_activityGetsStateSaved_then_shouldAlsoSaveCalculatorState() {

@@ -211,5 +211,18 @@ public class SimpleCalculatorImplTest {
     calculatorUnderTest.insertEquals();
     assertEquals("8-", calculatorUnderTest.output());
   }
+
+  @Test
+  public void when_negativeFirst_should_flipOperation(){
+    SimpleCalculatorImpl calculatorUnderTest = new SimpleCalculatorImpl();
+    calculatorUnderTest.insertMinus();
+    calculatorUnderTest.insertDigit(1);
+    calculatorUnderTest.insertDigit(0);
+    calculatorUnderTest.insertEquals();
+    calculatorUnderTest.insertPlus();
+    calculatorUnderTest.insertDigit(5);
+    calculatorUnderTest.insertEquals();
+    assertEquals("-5", calculatorUnderTest.output());
+  }
 }
 

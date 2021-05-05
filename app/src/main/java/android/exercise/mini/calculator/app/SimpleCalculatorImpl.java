@@ -72,6 +72,15 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
   @Override
   public void insertEquals() {
     String[] operations = this.outputDisplay.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
+    boolean minusFlag = includes(OPERATIONS, operations[0]);
+    if(minusFlag){
+      String [] flippedeOperations = new String[operations.length - 1];
+      flippedeOperations[0] = operations[3];
+      flippedeOperations[1] = operations[0];
+      flippedeOperations[2] = operations[1];
+      System.arraycopy(operations, 4, flippedeOperations, 3, flippedeOperations.length - 3);
+      operations = flippedeOperations;
+    }
     long result = Long.parseLong(operations[0]);
     if(!includes(OPERATIONS, operations[operations.length - 1])){
       for(int i = 1; i < operations.length - 1; i+=2){
